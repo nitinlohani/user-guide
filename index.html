@@ -27,6 +27,7 @@
 }
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
+html,body{overflow-x:hidden; max-width:100%;}
 body{
   margin:0; background:var(--white); color:var(--dark);
   font-family:'Inter',system-ui,sans-serif; font-size:15.5px; line-height:1.7;
@@ -52,16 +53,16 @@ code{font-family:'IBM Plex Mono',Consolas,monospace; background:var(--accent-sof
 /* ---------- Topbar ---------- */
 .topbar{
   position:sticky; top:0; z-index:100; height:var(--topbar-h);
-  display:flex; align-items:center; justify-content:space-between;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
   padding:0 40px; background:rgba(255,255,255,0.9); backdrop-filter:blur(10px);
   border-bottom:1px solid var(--border);
 }
-.brand{display:flex; align-items:center; gap:10px;}
-.brand img{height:34px; width:auto;}
+.brand{display:flex; align-items:center; gap:10px; min-width:0; flex-shrink:1;}
+.brand img{height:34px; width:auto; flex-shrink:1; min-width:0; max-width:100%;}
 .crumb{display:flex; align-items:center; gap:8px; font-size:13.5px; color:var(--grey); font-weight:500;}
 .crumb .sep{color:#C9C9D6;}
 .crumb .current{color:var(--dark); font-weight:600;}
-.top-actions{display:flex; align-items:center; gap:18px;}
+.top-actions{display:flex; align-items:center; gap:18px; flex:none;}
 .top-actions a.back{font-size:13.5px; font-weight:600; color:var(--grey);}
 .btn{
   display:inline-flex; align-items:center; gap:8px; font-weight:600; font-size:14px;
@@ -100,6 +101,7 @@ code{font-family:'IBM Plex Mono',Consolas,monospace; background:var(--accent-sof
 .sidebar::-webkit-scrollbar{width:5px;}
 .sidebar::-webkit-scrollbar-thumb{background:var(--border); border-radius:3px;}
 .side-title{font-size:11.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--grey-light); margin-bottom:14px;}
+.sidebar-cta{display:none;}
 .side-link{
   display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:10px;
   font-size:13.8px; font-weight:600; color:var(--grey); margin-bottom:2px;
@@ -169,7 +171,9 @@ figcaption{
   border-top:1px solid var(--border); font-style:italic;
 }
 
-.table-wrap{overflow-x:auto; margin:14px 0 22px; border:1px solid var(--border); border-radius:var(--radius-md);}
+.table-wrap{overflow-x:auto; margin:14px 0 22px; border:1px solid var(--border); border-radius:var(--radius-md); position:relative; -webkit-overflow-scrolling:touch;}
+.table-wrap::after{content:''; position:absolute; top:0; right:0; bottom:0; width:26px; background:linear-gradient(to right, transparent, rgba(255,255,255,0.95)); pointer-events:none; display:none; border-radius:0 var(--radius-md) var(--radius-md) 0;}
+@media (max-width:600px){ .table-wrap::after{display:block;} }
 table{width:100%; border-collapse:collapse; font-size:13.8px;}
 thead th{background:var(--dark); color:#fff; text-align:left; padding:11px 16px; font-weight:600; font-family:'Poppins',sans-serif;}
 tbody td{padding:11px 16px; border-top:1px solid var(--border); color:var(--grey);}
@@ -234,10 +238,7 @@ figure.shot-wide:hover{transform:translateY(-3px); box-shadow:0 18px 40px rgba(2
 }
 .doc-section h2:hover .h2-anchor{opacity:1;}
 
-@media (max-width:700px){
-  .bg-blob{display:none;}
-  .back-to-top{right:18px; bottom:18px;}
-}
+
 
 
 /* ---------- Footer ---------- */
@@ -251,21 +252,89 @@ footer .btn-primary{box-shadow:none;}
 .foot-bottom{padding-top:22px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:12.8px; color:#7B7B8A;}
 
 /* mobile */
-.menu-toggle{display:none; background:none; border:none; color:var(--dark); font-size:22px; cursor:pointer;}
+.menu-toggle{display:none; background:none; border:none; color:var(--dark); font-size:20px; cursor:pointer; width:38px; height:38px; border-radius:9px; align-items:center; justify-content:center;}
+.menu-toggle:hover{background:var(--bg-card);}
+.sidebar-overlay{display:none; position:fixed; inset:0; background:rgba(17,17,17,0.42); z-index:149;}
+.sidebar-overlay.show{display:block;}
+
+/* ---------- Tablet & mobile ---------- */
 @media (max-width:900px){
-  .layout{flex-direction:column;}
+  .layout{flex-direction:column; padding-bottom:60px; align-items:stretch;}
+  .content{width:100%; max-width:100%;}
+  .sidebar-cta{display:flex; margin-bottom:16px;}
   .sidebar{
-    position:static; width:100%; max-height:none; padding-right:0;
-    display:none;
+    position:fixed; top:var(--topbar-h); left:0; right:0; width:100%;
+    max-height:calc(100vh - var(--topbar-h)); overflow-y:auto;
+    padding:18px 20px 24px; margin:0; z-index:150;
+    background:var(--white); border-bottom:1px solid var(--border);
+    box-shadow:0 18px 34px rgba(23,23,23,0.14);
+    transform:translateY(-12px); opacity:0; visibility:hidden;
+    transition:transform .22s ease, opacity .22s ease, visibility .22s ease;
   }
-  .sidebar.open{display:block;}
-  .menu-toggle{display:block;}
+  .sidebar.open{transform:translateY(0); opacity:1; visibility:visible;}
+  .side-link{padding:12px 14px; font-size:14.5px;}
+  .menu-toggle{display:flex;}
   .crumb{display:none;}
-  .top-actions .back, .top-actions .btn-primary{display:none;}
+  .top-actions{gap:10px;}
+  .top-actions .back{display:none;}
+  .top-actions .btn-primary{padding:9px 16px; font-size:13px;}
+  .hero{padding:40px 20px 40px;}
   .hero h1{font-size:32px;}
-  .hero, .layout{padding-left:20px; padding-right:20px;}
+  .hero-lead{font-size:16px;}
+  .layout{padding-left:20px; padding-right:20px;}
   .topbar{padding:0 20px;}
+  .brand img{height:28px;}
 }
+
+@media (max-width:600px){
+  body{font-size:16px; line-height:1.65;}
+  .brand img{height:24px;}
+  .top-actions{gap:10px;}
+  .hero{padding:32px 18px 36px;}
+  .eyebrow{font-size:11.5px; padding:6px 12px; margin-bottom:16px;}
+  .hero h1{font-size:26px; line-height:1.2;}
+  .hero-lead{font-size:15.5px; margin-bottom:20px;}
+  .hero-stats{flex-direction:column; gap:12px; align-items:flex-start;}
+  .layout{padding:0 18px 60px; gap:0;}
+  .doc-section{padding:28px 0 6px;}
+  .doc-section h2{font-size:22px;}
+  .sec-intro{font-size:15.5px;}
+  h3{font-size:17px; margin:26px 0 10px; flex-wrap:wrap;}
+  .h4-plain{font-size:14.5px;}
+  p{font-size:15px;}
+  ul.check-list li{font-size:14.5px; padding-left:26px;}
+  .howto{padding:16px 16px; margin:14px 0 16px;}
+  .callout{padding:14px 16px;}
+  .sec-tag{font-size:11px; padding:4px 10px;}
+  .nav-crumb{font-size:12px; padding:6px 11px;}
+  figure.shot-wide, figure.shot{margin:18px 0 8px; border-radius:var(--radius-md);}
+  figcaption{padding:10px 14px; font-size:11.5px;}
+  table{font-size:12.8px;}
+  thead th, tbody td{padding:9px 12px;}
+  .table-wrap{-webkit-overflow-scrolling:touch; position:relative;}
+  .lightbox{padding:16px;}
+  .lightbox-close{top:14px; right:14px; width:38px; height:38px; font-size:18px;}
+  .back-to-top{right:16px; bottom:16px; width:44px; height:44px;}
+  footer{padding:40px 18px 24px;}
+  .foot-top{flex-direction:column; align-items:flex-start;}
+  .foot-bottom{flex-direction:column; align-items:flex-start; gap:8px;}
+  code{word-break:break-word;}
+}
+
+@media (max-width:480px){
+  .top-actions .btn-primary{display:none;}
+}
+@media (max-width:420px){
+  .hero h1{font-size:23px;}
+  .doc-section h2{font-size:20px;}
+  .hero-stats .stat{font-size:13.5px;}
+  .brand img{height:22px;}
+}
+
+@media (max-width:700px){
+  .bg-blob{display:none;}
+}
+
 </style><noscript><style>.doc-section{opacity:1!important;transform:none!important;}</style></noscript>
 </head>
 <body>
@@ -298,8 +367,10 @@ footer .btn-primary{box-shadow:none;}
   </div>
 </section>
 
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 <div class="layout">
   <aside class="sidebar" id="sidebar">
+    <a class="btn btn-primary sidebar-cta" href="https://www.fyscaltech.com/ft-aml-solution/#get-started">Get Started →</a>
     <div class="side-title">On this page</div>
     <a href="#getting-started" class="side-link" data-target="getting-started"><span class="side-num">01</span>Getting Started</a><a href="#case-manager" class="side-link" data-target="case-manager"><span class="side-num">02</span>Case Manager</a><a href="#alert-manager" class="side-link" data-target="alert-manager"><span class="side-num">03</span>Alert Manager</a><a href="#str-listing" class="side-link" data-target="str-listing"><span class="side-num">04</span>STR Listing</a><a href="#ai-agent-manager" class="side-link" data-target="ai-agent-manager"><span class="side-num">05</span>AI Agent Manager</a><a href="#name-screening" class="side-link" data-target="name-screening"><span class="side-num">06</span>Name Screening</a><a href="#transaction-monitoring" class="side-link" data-target="transaction-monitoring"><span class="side-num">07</span>Transaction Monitoring &amp; Rule Engine</a><a href="#data-ingestion" class="side-link" data-target="data-ingestion"><span class="side-num">08</span>Data Ingestion</a><a href="#admin" class="side-link" data-target="admin"><span class="side-num">09</span>Admin</a><a href="#hierarchy-management" class="side-link" data-target="hierarchy-management"><span class="side-num">10</span>Hierarchy Management</a><a href="#help-support" class="side-link" data-target="help-support"><span class="side-num">11</span>Help &amp; Support</a>
   </aside>
@@ -451,9 +522,15 @@ footer .btn-primary{box-shadow:none;}
 <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
 <div class="lightbox" id="lightbox"><span class="lightbox-close" id="lightboxClose">✕</span><img id="lightboxImg" src="" alt=""></div>
 <script>
+const sidebarEl = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+function openSidebar(){ sidebarEl.classList.add('open'); sidebarOverlay.classList.add('show'); document.body.style.overflow='hidden'; }
+function closeSidebar(){ sidebarEl.classList.remove('open'); sidebarOverlay.classList.remove('show'); document.body.style.overflow=''; }
 document.getElementById('menuToggle').addEventListener('click', function(){
-  document.getElementById('sidebar').classList.toggle('open');
+  if(sidebarEl.classList.contains('open')){ closeSidebar(); } else { openSidebar(); }
 });
+sidebarOverlay.addEventListener('click', closeSidebar);
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeSidebar(); });
 const links = document.querySelectorAll('.side-link');
 const secs = document.querySelectorAll('.doc-section');
 const io = new IntersectionObserver((entries)=>{
@@ -467,7 +544,7 @@ const io = new IntersectionObserver((entries)=>{
   });
 }, {rootMargin:'-20% 0px -70% 0px'});
 secs.forEach(s=>io.observe(s));
-links.forEach(l=>l.addEventListener('click', ()=>{ document.getElementById('sidebar').classList.remove('open'); }));
+links.forEach(l=>l.addEventListener('click', closeSidebar));
 
 /* --- Scroll progress bar --- */
 const progressBar = document.getElementById('scrollProgress');
