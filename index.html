@@ -172,8 +172,12 @@ figcaption{
 }
 
 .table-wrap{overflow-x:auto; margin:14px 0 22px; border:1px solid var(--border); border-radius:var(--radius-md); position:relative; -webkit-overflow-scrolling:touch;}
-.table-wrap::after{content:''; position:absolute; top:0; right:0; bottom:0; width:26px; background:linear-gradient(to right, transparent, rgba(255,255,255,0.95)); pointer-events:none; display:none; border-radius:0 var(--radius-md) var(--radius-md) 0;}
-@media (max-width:600px){ .table-wrap::after{display:block;} }
+.table-wrap.scrollable::after{
+  content:''; position:absolute; top:0; right:0; bottom:0; width:22px; pointer-events:none;
+  box-shadow:inset -14px 0 10px -10px rgba(23,23,23,0.28);
+  opacity:1; transition:opacity .2s ease; border-radius:0 var(--radius-md) var(--radius-md) 0;
+}
+.table-wrap.scrollable.at-end::after{opacity:0;}
 table{width:100%; border-collapse:collapse; font-size:13.8px;}
 thead th{background:var(--dark); color:#fff; text-align:left; padding:11px 16px; font-weight:600; font-family:'Poppins',sans-serif;}
 tbody td{padding:11px 16px; border-top:1px solid var(--border); color:var(--grey);}
@@ -613,6 +617,28 @@ document.querySelectorAll('.doc-section > h2').forEach(h=>{
   });
   h.appendChild(a);
 });
+
+/* --- Table horizontal-scroll hint (only shows when there is real overflow, clears once fully scrolled) --- */
+const SCROLL_END_SLOP = 6; // px tolerance for subpixel / zoom rounding across browsers
+function isAtScrollEnd(tw){
+  return Math.ceil(tw.scrollLeft) + tw.clientWidth >= tw.scrollWidth - SCROLL_END_SLOP;
+}
+function refreshTableScrollHints(){
+  document.querySelectorAll('.table-wrap').forEach(tw=>{
+    const scrollable = tw.scrollWidth > tw.clientWidth + SCROLL_END_SLOP;
+    tw.classList.toggle('scrollable', scrollable);
+    tw.classList.toggle('at-end', !scrollable || isAtScrollEnd(tw));
+  });
+}
+document.querySelectorAll('.table-wrap').forEach(tw=>{
+  tw.addEventListener('scroll', ()=>{
+    tw.classList.toggle('at-end', isAtScrollEnd(tw));
+  }, {passive:true});
+});
+refreshTableScrollHints();
+window.addEventListener('resize', refreshTableScrollHints);
+window.addEventListener('load', refreshTableScrollHints);
+window.addEventListener('load', ()=> setTimeout(refreshTableScrollHints, 500)); // re-check after web fonts settle
 </script>
 </body>
 </html>
