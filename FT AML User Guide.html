@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#352eff">
+<meta name="description" content="Complete step-by-step user guide for the FT AML Platform — screening, transaction monitoring, case management, and data ingestion.">
+<title>FT AML Platform — User Guide | FyscalTech</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<link rel="stylesheet" href="ui_kits/website/responsive.css">
+<link rel="stylesheet" href="ui_kits/website/hero.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body);background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  ::selection{background:var(--primary);color:#fff}
+  img{max-width:100%}
+
+  /* scroll progress */
+  #scrollProgress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--primary);z-index:60;transition:width .08s linear}
+
+  /* ── HERO ─────────────────────────────────────────────── */
+  .ug-hero{position:relative;background:var(--surface-soft);border-bottom:1px solid var(--border);overflow:hidden}
+  .ug-hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 80% 70% at 70% 20%,#000,transparent 75%);mask-image:radial-gradient(ellipse 80% 70% at 70% 20%,#000,transparent 75%);opacity:.6;pointer-events:none}
+  .ug-hero-inner{position:relative;max-width:1200px;margin:0 auto;padding:72px 32px 64px}
+  .ug-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;line-height:1;text-transform:uppercase;letter-spacing:.14em;color:var(--primary);margin-bottom:22px}
+  .ug-eyebrow span{flex:none;width:26px;height:2px;background:var(--primary)}
+  .ug-h1{font-size:60px;font-weight:700;letter-spacing:-.035em;line-height:1.02;color:var(--fg);max-width:16ch}
+  .ug-h1 .blue{color:var(--primary)}
+  .ug-lead{font-size:18px;line-height:1.65;color:var(--mono-600);max-width:60ch;margin-top:22px}
+  .ug-stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+  .ug-stat{display:inline-flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--border);padding:10px 16px;font-size:13.5px;font-weight:500;color:var(--fg)}
+  .ug-stat .tick{display:grid;place-items:center;width:18px;height:18px;background:var(--primary);color:#fff;font-size:11px;font-weight:800;border-radius:9999px;flex:none}
+
+  /* ── LAYOUT ───────────────────────────────────────────── */
+  .layout{max-width:1200px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:264px 1fr;gap:56px;align-items:start}
+  .sidebar{position:sticky;top:88px;padding:40px 0 64px;display:flex;flex-direction:column}
+  .sidebar-cta{display:inline-flex;align-items:center;justify-content:center;background:var(--primary);color:#fff;font-size:14px;font-weight:600;text-decoration:none;padding:13px 18px;margin-bottom:28px;transition:background .18s ease}
+  .sidebar-cta:hover{background:var(--tertiary-2)}
+  .side-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--mono-400);margin-bottom:14px;padding-left:14px}
+  .side-link{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:500;color:var(--mono-600);text-decoration:none;padding:9px 14px;border-left:2px solid transparent;line-height:1.3;transition:color .15s ease,border-color .15s ease,background .15s ease}
+  .side-link:hover{color:var(--fg);background:var(--surface-soft)}
+  .side-link.active{color:var(--primary);border-left-color:var(--primary);font-weight:600}
+  .side-num{font:700 11px var(--font-mono);color:var(--mono-300);flex:none}
+  .side-link.active .side-num{color:var(--primary)}
+
+  /* ── CONTENT ──────────────────────────────────────────── */
+  .content{min-width:0;padding:48px 0 80px}
+  .doc-section{padding-top:56px;margin-top:56px;border-top:1px solid var(--border);opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+  .doc-section.in-view{opacity:1;transform:none}
+  .doc-section:first-child{border-top:none;margin-top:0;padding-top:8px}
+  .sec-tag{display:inline-block;font:700 12px var(--font-mono);letter-spacing:.06em;color:var(--primary);background:var(--primary-soft);padding:6px 12px;margin-bottom:16px}
+  .content h2{font-size:36px;font-weight:700;letter-spacing:-.025em;line-height:1.12;color:var(--fg);margin-bottom:18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .h2-anchor{cursor:pointer;font-size:16px;opacity:0;transition:opacity .15s ease;user-select:none}
+  .content h2:hover .h2-anchor{opacity:.45}
+  .h2-anchor:hover{opacity:1!important}
+  .content h3{font-size:21px;font-weight:600;letter-spacing:-.015em;color:var(--fg);margin:38px 0 14px;display:flex;align-items:baseline;gap:12px}
+  .sub-num{font:700 14px var(--font-mono);color:var(--primary);flex:none}
+  .h4-plain{font-size:16px;font-weight:600;color:var(--fg);margin:26px 0 12px}
+  .content p{font-size:15.5px;line-height:1.72;color:var(--mono-600);margin-bottom:14px}
+  .sec-intro{font-size:17.5px;line-height:1.65;color:var(--mono-700);margin-bottom:8px}
+  .content strong{color:var(--fg);font-weight:600}
+  .content a{color:var(--primary);font-weight:600;text-decoration:none}
+  .content a:hover{text-decoration:underline}
+  .content code{font:500 13.5px var(--font-mono);background:var(--surface-soft);border:1px solid var(--border);padding:2px 6px;color:var(--fg);white-space:nowrap}
+
+  .check-list{list-style:none;display:flex;flex-direction:column;gap:11px;margin:6px 0 18px}
+  .check-list li{position:relative;padding-left:30px;font-size:15px;line-height:1.6;color:var(--mono-600)}
+  .check-list li::before{content:"";position:absolute;left:0;top:2px;width:19px;height:19px;background:var(--primary-soft);border:1px solid rgba(53,46,255,.25)}
+  .check-list li::after{content:"";position:absolute;left:6px;top:6px;width:6px;height:10px;border:solid var(--primary);border-width:0 2px 2px 0;transform:rotate(45deg)}
+
+  .nav-crumb{display:inline-flex;align-items:center;flex-wrap:wrap;gap:8px;font:500 13px var(--font-mono);color:var(--mono-500);background:var(--surface-soft);border:1px solid var(--border);padding:8px 14px;margin:6px 0 16px}
+  .nav-crumb span{font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:10.5px;color:var(--primary)}
+
+  figure.shot-wide{margin:22px 0 10px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow-sm)}
+  figure.shot-wide img{width:100%;height:auto;display:block;cursor:zoom-in}
+  figcaption{padding:12px 18px;font-size:12.5px;color:var(--mono-500);background:var(--surface-soft);border-top:1px solid var(--border);font-style:italic}
+
+  .howto{background:var(--surface-soft);border:1px solid var(--border);padding:20px 22px;margin:18px 0}
+  .howto h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--primary);margin-bottom:12px}
+  .howto .check-list{margin:0}
+
+  .callout{position:relative;background:var(--bg-tertiary);border:1px solid rgba(53,46,255,.18);padding:18px 22px;margin:18px 0}
+  .callout-tag{display:inline-block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--primary);margin-bottom:8px}
+  .callout p{margin:0;font-size:14.5px;color:var(--mono-700)}
+
+  .table-wrap{position:relative;overflow-x:auto;border:1px solid var(--border);margin:18px 0}
+  .table-wrap table{border-collapse:collapse;width:100%;font-size:14px}
+  .table-wrap thead th{text-align:left;padding:12px 16px;background:var(--ink);color:#fff;font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+  .table-wrap tbody td{padding:11px 16px;border-top:1px solid var(--border);color:var(--mono-700);vertical-align:top}
+  .table-wrap tbody tr:nth-child(even){background:var(--surface-soft)}
+  .table-wrap.scrollable::after{content:"→ scroll";position:absolute;top:8px;right:10px;font:600 10px var(--font-mono);color:var(--mono-400);background:rgba(255,255,255,.85);padding:2px 6px;pointer-events:none;transition:opacity .2s}
+  .table-wrap.at-end::after{opacity:0}
+
+  .thanks{margin-top:24px;font-size:16px;font-weight:600;color:var(--primary)}
+
+  /* back to top */
+  .back-to-top{position:fixed;right:24px;bottom:24px;width:46px;height:46px;display:grid;place-items:center;background:var(--ink);color:#fff;border:none;font-size:18px;cursor:pointer;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .2s,transform .2s;z-index:40}
+  .back-to-top.show{opacity:1;transform:none;pointer-events:auto}
+
+  /* lightbox */
+  .lightbox{position:fixed;inset:0;background:rgba(16,16,19,.86);display:none;align-items:center;justify-content:center;z-index:100;padding:40px}
+  .lightbox.open{display:flex}
+  .lightbox img{max-width:96vw;max-height:92vh;box-shadow:var(--shadow-lg)}
+  .lightbox-close{position:absolute;top:22px;right:28px;color:#fff;font-size:26px;cursor:pointer;line-height:1}
+
+  /* mobile TOC toggle + overlay */
+  .toc-toggle{display:none}
+  .sidebar-overlay{display:none}
+
+  @media (max-width:960px){
+    .ug-h1{font-size:44px}
+    .layout{grid-template-columns:1fr;gap:0;padding:0}
+    .content{padding:24px 24px 64px}
+    .sidebar{position:fixed;top:0;left:0;bottom:0;width:300px;max-width:88vw;background:var(--surface);border-right:1px solid var(--border);padding:24px 18px;z-index:70;transform:translateX(-102%);transition:transform .28s ease;overflow-y:auto;box-shadow:var(--shadow-lg)}
+    .sidebar.open{transform:none}
+    .sidebar-overlay{position:fixed;inset:0;background:rgba(16,16,19,.4);z-index:65;opacity:0;pointer-events:none;transition:opacity .25s}
+    .sidebar-overlay.show{opacity:1;pointer-events:auto}
+    .toc-toggle{display:inline-flex;align-items:center;gap:8px;position:sticky;top:64px;z-index:45;width:100%;background:var(--surface);border:none;border-bottom:1px solid var(--border);padding:13px 24px;font-size:13px;font-weight:600;color:var(--fg);cursor:pointer;font-family:inherit}
+    .toc-toggle span{font:700 12px var(--font-mono);color:var(--primary)}
+  }
+  @media (max-width:560px){
+    .ug-hero-inner{padding:48px 22px 44px}
+    .ug-h1{font-size:34px}
+    .ug-lead{font-size:16px}
+    .content h2{font-size:28px}
+  }
+</style>
+</head>
+<body>
+<div id="scrollProgress"></div>
+<div id="nav-root"></div>
+
+<section class="ug-hero">
+  <div class="ug-hero-inner">
+    <span class="ug-eyebrow"><span></span>Documentation</span>
+    <h1 class="ug-h1">FT AML Platform<br><span class="blue">User Guide</span></h1>
+    <p class="ug-lead">Everything a compliance team needs to run FT AML day to day — screening, transaction monitoring, case management, and data ingestion, explained module by module.</p>
+    <div class="ug-stats">
+      <div class="ug-stat"><span class="tick">✓</span> 11 modules covered</div>
+      <div class="ug-stat"><span class="tick">✓</span> Step-by-step walkthroughs</div>
+      <div class="ug-stat"><span class="tick">✓</span> Built for compliance teams</div>
+    </div>
+  </div>
+</section>
+
+<button class="toc-toggle" id="menuToggle"><span>≡</span> On this page</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <a class="btn btn-primary sidebar-cta" href="FT AML Solution.html">Explore FT AML →</a>
+    <div class="side-title">On this page</div>
+    <a href="#getting-started" class="side-link" data-target="getting-started"><span class="side-num">01</span>Getting Started</a><a href="#case-manager" class="side-link" data-target="case-manager"><span class="side-num">02</span>Case Manager</a><a href="#alert-manager" class="side-link" data-target="alert-manager"><span class="side-num">03</span>Alert Manager</a><a href="#str-listing" class="side-link" data-target="str-listing"><span class="side-num">04</span>STR Listing</a><a href="#ai-agent-manager" class="side-link" data-target="ai-agent-manager"><span class="side-num">05</span>AI Agent Manager</a><a href="#name-screening" class="side-link" data-target="name-screening"><span class="side-num">06</span>Name Screening</a><a href="#transaction-monitoring" class="side-link" data-target="transaction-monitoring"><span class="side-num">07</span>Transaction Monitoring &amp; Rule Engine</a><a href="#data-ingestion" class="side-link" data-target="data-ingestion"><span class="side-num">08</span>Data Ingestion</a><a href="#admin" class="side-link" data-target="admin"><span class="side-num">09</span>Admin</a><a href="#hierarchy-management" class="side-link" data-target="hierarchy-management"><span class="side-num">10</span>Hierarchy Management</a><a href="#help-support" class="side-link" data-target="help-support"><span class="side-num">11</span>Help &amp; Support</a>
+  </aside>
+  <main class="content">
+    
+    <section class="doc-section" id="getting-started">
+      <div class="sec-tag">Module 01</div>
+      <h2>Getting Started</h2>
+      <p class="sec-intro">FT AML is an Anti-Money Laundering (AML) platform that helps financial institutions detect suspicious activity, screen customers against regulatory watchlists, monitor transactions, manage investigations, and comply with AML/CTF regulations.</p>
+      <h3 id="s-1-1"><span class="sub-num">1.1</span>Platform Objectives</h3><p>FT AML is built around a core set of objectives:</p><ul class="check-list"><li>Detect suspicious financial transactions by continuously monitoring customer and transaction activity</li><li>Support banks and financial institutions in complying with applicable AML and Counter-Terrorist Financing (CTF) regulations</li><li>Assess and calculate customer risk based on configurable risk parameters and business rules</li><li>Generate timely alerts for unusual or potentially suspicious activity requiring further investigation</li><li>Enable compliance teams to efficiently investigate, manage, and resolve AML cases</li><li>Minimize false positive alerts through intelligent rule design and optimized risk assessment</li><li>Deliver a scalable, configurable AML platform comparable to leading AML solution providers</li></ul><h3 id="s-1-2"><span class="sub-num">1.2</span>Login</h3><p class="nav-crumb"><span>Navigation</span> Platform URL → Login</p><ul class="check-list"><li>Navigate to the FT AML Platform URL</li><li>Enter your email and password</li><li>Click <strong>Sign in</strong></li><li>You will receive an OTP to verify your identity — enter it to complete login</li><li>Once verified, you will land on the Homepage, the entry point to all modules</li><li>Use <strong>Forgot Password</strong> if login fails after verifying credentials</li></ul><p>Secure authentication is the first line of defense for sensitive AML data, and every login is tied to a user account — supporting audit requirements by recording who created, modified, or closed an AML investigation.</p><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-01.png" alt="Figure 1.1 — Login" loading="lazy">
+      <figcaption>Figure 1.1 — Login</figcaption>
+    </figure><h3 id="s-1-3"><span class="sub-num">1.3</span>Homepage</h3><p class="nav-crumb"><span>Navigation</span> Login → Homepage</p><p>After entering valid credentials, the user is redirected to the Homepage. This is the central workspace for compliance teams, giving quick access to every AML module from one place and reducing time spent switching between investigations, screening, and monitoring activities.</p><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-02.png" alt="Figure 1.2 — FT AML Homepage" loading="lazy">
+      <figcaption>Figure 1.2 — FT AML Homepage</figcaption>
+    </figure><h3 id="s-1-4"><span class="sub-num">1.4</span>Roles &amp; Access</h3><p>FT AML can be operated entirely by your own team, or you can hand day-to-day operations to FT AML's Managed Service team. The roles below apply either way — the only difference is who fills them.</p><ul class="check-list"><li><strong>Compliance Analyst</strong> — reviews alerts and screening hits, conducts first-level investigation. Can be run in-house or delegated to the FT AML Managed Service team under an SLA.</li><li><strong>Compliance Officer / MLRO</strong> — approves SAR/STR filings, reviews SLA and dashboard metrics</li><li><strong>AML Configuration Admin</strong> — maintains weightages, severity bands, rules and variables. Can be run in-house or delegated to the FT AML Managed Service team under an SLA.</li><li><strong>IT / Platform Admin</strong> — manages user access, ingestion schedules, and platform availability</li><li><strong>Managed Service</strong> — FT AML's own compliance operations team, engaged by institutions that prefer to outsource day-to-day screening, monitoring, and first-level triage instead of staffing these roles internally. Escalations and final sign-off remain with your Compliance Officer / MLRO.</li></ul><h3 id="s-1-5"><span class="sub-num">1.5</span>Module Overview</h3><p>After logging in, users can access the full range of FT AML modules from the FT AML menu. The hierarchy below shows how the modules and their sub-features are organized, so you know where to find each feature before exploring it in detail.</p><ul class="check-list"><li>Homepage — the landing workspace after login</li><li>Alerts — a platform-level view of notifications separate from the FT AML Alert Manager</li><li>FT AML — Case Manager, Alert Manager, STR Listing, AI Agent Manager, Name Screening (Watchlist Search, Manual Screening, Batch Screening, Delta Screening, Configuration → Alerts / Screening), Transaction Monitoring (Typology, Variables), Data Ingestion (Watchlist, TMS)</li><li>Admin — profile, roles, and platform-wide settings</li><li>Hierarchy Management — organizational reporting structure and escalation paths</li><li>Ontology — the underlying data model connecting entities, instruments, and transactions</li></ul>
+    </section>
+    <section class="doc-section" id="case-manager">
+      <div class="sec-tag">Module 02</div>
+      <h2>Case Manager</h2>
+      
+      <p class="nav-crumb"><span>Navigation</span> FT AML → Case Manager</p><h4 class="h4-plain">Case Lifecycle</h4><p>Alert Escalated → Investigator Review → Findings Documented → Disposition (False Positive / Escalate for SAR-STR / Request Info) → MLRO Approval → Audit Record</p><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-03.png" alt="Figure 2.1 — Case Manager" loading="lazy">
+      <figcaption>Figure 2.1 — Case Manager</figcaption>
+    </figure>
+    </section>
+    <section class="doc-section" id="alert-manager">
+      <div class="sec-tag">Module 03</div>
+      <h2>Alert Manager</h2>
+      
+      <p class="nav-crumb"><span>Navigation</span> FT AML → Alert Manager</p><p>All screening and transaction monitoring hits route here, ranked by severity and SLA deadline.</p><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-04.png" alt="Figure 3.1 — Alert Manager" loading="lazy">
+      <figcaption>Figure 3.1 — Alert Manager</figcaption>
+    </figure>
+    </section>
+    <section class="doc-section" id="str-listing">
+      <div class="sec-tag">Module 04</div>
+      <h2>STR Listing</h2>
+      
+      <p class="nav-crumb"><span>Navigation</span> FT AML → STR Listing</p><p>STR Listing is the screen where Suspicious Transaction Reports (STRs) generated from AML cases are tracked. Each row represents one case that has produced an STR, linking the case, the STR reference, who raised it, and the transaction subjects and amount involved.</p><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-05.png" alt="Figure 4.1 — STR Listing" loading="lazy">
+      <figcaption>Figure 4.1 — STR Listing</figcaption>
+    </figure>
+    </section>
+    <section class="doc-section" id="ai-agent-manager">
+      <div class="sec-tag">Module 05</div>
+      <h2>AI Agent Manager</h2>
+      
+      <p class="nav-crumb"><span>Navigation</span> FT AML → AI Agent Manager</p><p>Assists analysts by automating repetitive triage and preliminary analysis. Outputs support investigator judgement — they don't replace analyst sign-off.</p>
+    </section>
+    <section class="doc-section" id="name-screening">
+      <div class="sec-tag">Module 06</div>
+      <h2>Name Screening</h2>
+      <p class="sec-intro">Screens individuals and entities against the LSEG watchlist database to identify potential sanctions, PEP, and adverse media matches.</p>
+      <h3 id="s-6-1"><span class="sub-num">6.1</span>Watchlist Search</h3><p class="nav-crumb"><span>Navigation</span> Homepage → FT AML → Name Screening → Watchlist Search</p><p>Enables users to search for individuals or entities against the LSEG watchlist database. Used for ad-hoc, on-demand lookups — e.g. screening a customer against an international sanctions list before opening an account.</p><div class="howto"><h4>How to use</h4><ul class="check-list"><li>Enter the Name of the individual or entity in the search box</li><li>(Optional) Apply additional filters such as Country, PEP Status, Category, or Entity to narrow the search results</li><li>Click Search or press Enter</li><li>Review the list of matching records displayed below</li></ul></div><div class="callout"><span class="callout-tag">Example</span><p>A branch officer searches “John Smith” with Country set to United Kingdom and PEP Status set to Active, to quickly check whether a walk-in customer appears on any current sanctions or PEP list before opening an account.</p></div><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-06.png" alt="Figure 6.1 — Watchlist Search" loading="lazy">
+      <figcaption>Figure 6.1 — Watchlist Search</figcaption>
+    </figure><h3 id="s-6-2"><span class="sub-num">6.2</span>Manual Screening</h3><p class="nav-crumb"><span>Navigation</span> Homepage → FT AML → Name Screening → Manual Screening</p><p>Allows users to screen an individual or entity by manually entering customer information. The system compares the provided details against the watchlist database using configured matching criteria and weightages to identify potential matches. This gives analysts flexibility to screen immediately during investigations, onboarding, periodic reviews, or whenever customer information changes — outside the scheduled automated screening cycle.</p><div class="howto"><h4>How to use</h4><ul class="check-list"><li>Enter the customer's Name</li><li>Select the Entity Type (e.g. Individual or Organization)</li><li>Provide additional details such as Gender, Date of Birth, Citizenship, and Address (optional but recommended for more accurate results)</li><li>Review the matching weightages displayed at the top of the page</li><li>Click Proceed to Screen to initiate the screening process</li></ul></div><div class="callout"><span class="callout-tag">Example</span><p>During onboarding, an analyst manually screens a new corporate client, “Meridian Trading Ltd”, entering its registered address and country of incorporation, and reviews the resulting match score before the account is approved.</p></div><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-07.png" alt="Figure 6.2 — Manual Screening" loading="lazy">
+      <figcaption>Figure 6.2 — Manual Screening</figcaption>
+    </figure><h3 id="s-6-3"><span class="sub-num">6.3</span>Batch Screening</h3><p class="nav-crumb"><span>Navigation</span> Homepage → FT AML → Name Screening → Batch Screening</p><p>Screens large customer populations at once (e.g. nightly onboarding batches), letting institutions re-screen millions of records efficiently — e.g. running the entire customer base overnight the moment a new sanctions list is received, instead of reviewing customers individually.</p><div class="howto"><h4>How to use</h4><ul class="check-list"><li>Navigate to Batch Screening from the Name Screening menu</li><li>View the list of screening jobs along with their current status</li><li>Use Search or Filters to locate a specific screening job</li><li>Monitor job progress using the dashboard cards (Processing, Completed, Failed)</li><li>Select a job to review records processed, alerts generated, errors (if any), and screening duration</li><li>Use Refresh to view the latest job status, or Change Schedule to modify the batch screening schedule</li></ul></div><div class="callout"><span class="callout-tag">Example</span><p>Each night, the institution's entire retail customer base is submitted as a batch job, so that any new sanctions or PEP list updates are checked against every customer without manual effort.</p></div><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-08.png" alt="Figure 6.3 — Batch Screening" loading="lazy">
+      <figcaption>Figure 6.3 — Batch Screening</figcaption>
+    </figure><h3 id="s-6-4"><span class="sub-num">6.4</span>Delta Screening</h3><p class="nav-crumb"><span>Navigation</span> Homepage → FT AML → Name Screening → Delta Screening</p><p>Automatically re-screens previously screened customers when the watchlist updates — the primary control for continuous, rather than point-in-time, compliance. Only the customers affected by the latest watchlist update are re-screened — e.g. a previously cleared customer is automatically rechecked the moment a new sanctions list is published, without reprocessing the full customer base.</p><div class="howto"><h4>How to use</h4><ul class="check-list"><li>Navigate to Delta Screening from the Name Screening menu</li><li>Review the scheduled screening runs displayed on the page</li><li>Use the Search, Status, or Date Range filters to locate a specific screening run</li><li>Monitor the screening schedule, including Next Run, Last Run, and Current Frequency</li><li>Click Change Schedule to modify the screening frequency or timing, if required</li><li>Select a completed run to review customers screened, alerts generated, and execution duration</li></ul></div><div class="callout"><span class="callout-tag">Example</span><p>When a new sanctions list is published, only the customers affected by that update are automatically re-screened overnight, and any new hits appear in the Alert Manager the next morning — with no need to re-run the full customer base.</p></div><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-09.png" alt="Figure 6.4 — Delta Screening" loading="lazy">
+      <figcaption>Figure 6.4 — Delta Screening</figcaption>
+    </figure><h3 id="s-6-5"><span class="sub-num">6.5</span>Configuration</h3><p>Controls how strictly a record must match, and how resulting hits are prioritized for review.</p><h4 class="h4-plain">6.5.1 Screening Configuration</h4><p class="nav-crumb"><span>Navigation</span> Homepage → FT AML → Name Screening → Configuration → Screening</p><p>Lets administrators configure the matching criteria and weightages used during screening. Each parameter — Name, Address, Citizenship, Gender, Date of Birth — can be assigned a custom weightage to determine the overall match score, so institutions can align screening sensitivity with their internal AML policies and risk appetite. Higher weightage strictness reduces false positives but risks missing true matches.</p><div class="howto"><h4>How to use</h4><ul class="check-list"><li>Navigate to Configuration → Screening from the Name Screening module</li><li>Review the active screening configuration and the assigned weightages</li><li>Click Edit to modify the screening configuration</li><li>Configure the weightage for Name, Address, Citizenship, Gender, and Date of Birth</li><li>Expand each section to configure its individual matching criteria</li><li>Save the configuration to apply the updated screening rules</li></ul></div><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-10.png" alt="Figure 6.5 — Screening Configuration" loading="lazy">
+      <figcaption>Figure 6.5 — Screening Configuration</figcaption>
+    </figure><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-11.png" alt="Figure 6.6 — Screening Configuration, expanded" loading="lazy">
+      <figcaption>Figure 6.6 — Screening Configuration, expanded</figcaption>
+    </figure><h4 class="h4-plain">6.5.2 Alert Configuration</h4><p class="nav-crumb"><span>Navigation</span> Homepage → FT AML → Name Screening → Configuration → Alerts</p><p>Lets administrators configure the alert severity levels generated during screening — defining score ranges, assigning severity levels, configuring SLA deadlines, and enabling auto-hibernation, so organizations can prioritize investigations and standardize alert handling based on risk.</p><div class="howto"><h4>How to use</h4><ul class="check-list"><li>Navigate to Configuration → Alerts from the Name Screening module</li><li>Review the active alert configuration and its defined severity levels</li><li>Click Edit to modify the existing alert configuration</li><li>Configure Alert Name, Score Range (Min % – Max %), No Alert option, SLA Deadline, and Auto Hibernation for each severity level</li><li>Save the configuration to apply the updated alert settings</li><li>Select Alert Configuration History to view previously saved configurations</li></ul></div><p>Full configuration history is retained for audit.</p><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-12.png" alt="Figure 6.7 — Alert Configuration" loading="lazy">
+      <figcaption>Figure 6.7 — Alert Configuration</figcaption>
+    </figure><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-13.png" alt="Figure 6.8 — Alert Configuration, History Detail" loading="lazy">
+      <figcaption>Figure 6.8 — Alert Configuration, History Detail</figcaption>
+    </figure>
+    </section>
+    <section class="doc-section" id="transaction-monitoring">
+      <div class="sec-tag">Module 07</div>
+      <h2>Transaction Monitoring &amp; Rule Engine</h2>
+      <p class="sec-intro">Detects suspicious transaction patterns using configurable typologies (rules) built from reusable Variables.</p>
+      <h3 id="s-7-1"><span class="sub-num">7.1</span>Rule Execution Flow</h3><p>Transactions Ingested → Variables Calculated → Aggregations Applied → Trigger Conditions Evaluated → Suppression Checked → Alerts Generated → Cases Created</p><p class="nav-crumb"><span>Navigation</span> Homepage → FT AML → Transaction Monitoring → Typology</p><p>Each monitoring rule is defined as a Typology — a named, versioned pattern (e.g. Structuring, High Value Transfer, Smurfing) built from Variables and Trigger Conditions. The Typology screen lists every rule with its current status (Draft, Shadow, or Published), the typology category it belongs to, and when it was created or last updated.</p><div class="howto"><h4>How to use</h4><ul class="check-list"><li>Navigate to FT AML → Transaction Monitoring → Typology</li><li>Search by rule name or rule ID to locate a specific typology</li><li>Review each rule's Status — Draft (in progress), Shadow (running silently for validation), or Published (live and generating alerts)</li><li>Click + New Draft to start building a new rule</li><li>Use the Actions menu to edit, duplicate, or change the status of an existing rule</li></ul></div><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-14.png" alt="Figure 7.1 — Transaction Monitoring Typologies" loading="lazy">
+      <figcaption>Figure 7.1 — Transaction Monitoring Typologies</figcaption>
+    </figure><h3 id="s-7-2"><span class="sub-num">7.2</span>Variables &amp; Aggregations</h3><p class="nav-crumb"><span>Navigation</span> Homepage → FT AML → Transaction Monitoring → Variables</p><p>Variables are named calculations reused across rules — e.g. Count, Sum, Avg, Max, Min, Distinct Count. The Variables module lets users view available variables, search for a specific variable, sort them, and create new ones as required.</p><ul class="check-list"><li>Count(sender_entity_id) · Sum(amount) · Avg(amount)</li><li>Distinct Count(sender_entity_id) · Max(amount) · Min(amount)</li></ul><div class="howto"><h4>How to use</h4><ul class="check-list"><li>Navigate to FT AML → Transaction Monitoring → Variables</li><li>Use the Search bar to quickly locate a variable by name</li><li>Use the Sort By dropdown to arrange variables by Updated, Created, or Name</li><li>Review each variable's Variable ID, Created Date, and Last Updated Date</li><li>Click + New Variable to create a new variable for use in monitoring rules</li></ul></div><p>Building variables instead of repeating logic in every rule gives four benefits: <strong>Reusability</strong> (one calculation, many rules), <strong>Performance</strong> (compute once, reuse), <strong>Readability</strong> (a named variable reads better than the raw logic it represents), and <strong>Maintainability</strong> (change the definition once and every rule using it updates automatically).</p><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-15.png" alt="Figure 7.2 — Variables" loading="lazy">
+      <figcaption>Figure 7.2 — Variables</figcaption>
+    </figure><h3 id="s-7-3"><span class="sub-num">7.3</span>Group By, Look Back &amp; End At</h3><ul class="check-list"><li>Group By calculates separately per value — e.g. per sender_entity_id</li><li>Look Back defines how far back analysis starts; End At defines where it stops</li><li>Example: Look Back = 10 Days, End At = 0 Days → analyses the last 10 days</li></ul><h3 id="s-7-4"><span class="sub-num">7.4</span>Trigger Conditions</h3><p>Trigger conditions decide when alerts are created — e.g. <code>count_sender_txns_1_week &gt; 5</code>, <code>amount &gt; 10000</code>, <code>country = 'High Risk'</code>. AND requires all conditions to be true; OR requires any one condition to be true. Values can be a Static Value (fixed threshold), a Variable (calculated), or Ingested Data (a raw transaction field).</p><p>A Variable calculates a value; a Trigger Condition checks that value and decides whether to raise an alert. A variable on its own is just information — the trigger condition is what tells the system that information is suspicious.</p><h3 id="s-7-5"><span class="sub-num">7.5</span>Suppression, Execution Interval &amp; Dry Run</h3><ul class="check-list"><li>Suppression Window prevents duplicate alerts for the same entity within a set period (e.g. 1 hour)</li><li>Execution Interval defines how often a rule runs: Hourly, Daily, Weekly, Monthly</li><li>Dry Run simulates historical execution without creating production alerts — used to validate records scanned, alerts created, and matching entities before a rule goes live</li></ul><h3 id="s-7-6"><span class="sub-num">7.6</span>Worked Example</h3><p>Example variable: <code>count_sender_txns_1_week</code> — the count of transactions made by each sender in the last 7 days. The engine calculates it once per sender, and every rule can reuse it:</p><div class="table-wrap"><table><thead><tr><th>Sender</th><th>Transactions in Last Week</th><th>Variable Value</th></tr></thead><tbody><tr><td>A</td><td>5</td><td>count_sender_txns_1_week = 5</td></tr><tr><td>B</td><td>1</td><td>count_sender_txns_1_week = 1</td></tr><tr><td>C</td><td>3</td><td>count_sender_txns_1_week = 3</td></tr></tbody></table></div><p>Real example — today is 10 Jul 2026. Sender A's transactions:</p><div class="table-wrap"><table><thead><tr><th>Date</th><th>Amount</th></tr></thead><tbody><tr><td>09 Jul</td><td>₹1,000</td></tr><tr><td>08 Jul</td><td>₹2,000</td></tr><tr><td>05 Jul</td><td>₹5,000</td></tr><tr><td>29 Jun</td><td>₹8,000</td></tr><tr><td>20 Jun</td><td>₹4,000</td></tr></tbody></table></div><ul class="check-list"><li>count_sender_txns_1_week (03–10 Jul) = 3</li><li>count_sender_txns_2_weeks (26 Jun–10 Jul) = 4</li><li>Rule: count_sender_txns_1_week &gt; 1 OR count_sender_txns_2_weeks &gt; 1</li><li>Eval: 3 &gt; 1 → TRUE  OR  4 &gt; 1 → TRUE  ⇒ Alert Generated</li></ul><h3 id="s-7-7"><span class="sub-num">7.7</span>More Trigger Condition Patterns</h3><div class="table-wrap"><table><thead><tr><th>Pattern</th><th>Variable</th><th>Trigger Condition</th></tr></thead><tbody><tr><td>Amount-based</td><td>total_amount_1_day</td><td>total_amount_1_day &gt; 100000</td></tr><tr><td>Count-based</td><td>count_sender_txns_24_hours</td><td>count_sender_txns_24_hours &gt; 10</td></tr><tr><td>Country-based</td><td>—</td><td>country = 'High Risk'</td></tr><tr><td>Combined (AND)</td><td>amount, country, count_sender_txns_1_day</td><td>amount &gt; 50000 AND country = 'High Risk' AND count_sender_txns_1_day &gt; 3</td></tr></tbody></table></div>
+    </section>
+    <section class="doc-section" id="data-ingestion">
+      <div class="sec-tag">Module 08</div>
+      <h2>Data Ingestion</h2>
+      <p class="sec-intro">Imports watchlist and transaction data feeding screening and monitoring.</p>
+      <h3 id="s-8-1"><span class="sub-num">8.1</span>Watchlist Ingestion</h3><p class="nav-crumb"><span>Navigation</span> Homepage → FT AML → Data Ingestion → Watchlist</p><p>Provides a complete history of watchlist files ingested into the system, so users can monitor the status of each ingestion process, verify successful uploads, and review ingestion type, source, processing time, and records processed — helping ensure the latest watchlist data is available for customer screening.</p><div class="howto"><h4>Key features</h4><ul class="check-list"><li>View the complete watchlist ingestion history</li><li>Search for ingestion records using the filename</li><li>Filter records by Ingestion Type (e.g. Delta, Delete) and Status</li><li>Monitor the processing status of each ingestion job</li><li>Review File Name, Ingestion Type, Source, Status, Start Time, End Time, Total Rows Processed, and Error Messages (if any)</li><li>Refresh the page to view the latest ingestion history</li></ul></div><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-16.png" alt="Figure 8.1 — Watchlist Ingestion" loading="lazy">
+      <figcaption>Figure 8.1 — Watchlist Ingestion</figcaption>
+    </figure><h3 id="s-8-2"><span class="sub-num">8.2</span>TMS Ingestion</h3><p class="nav-crumb"><span>Navigation</span> Homepage → FT AML → Data Ingestion → TMS</p><p>Provides an overview of all files ingested into the transaction monitoring system, so users can track ingestion jobs, monitor processing status, and verify that transaction, entity, and instrument data have been imported successfully — giving visibility into data ingestion health to ensure accurate transaction monitoring.</p><div class="howto"><h4>Key features</h4><ul class="check-list"><li>View the status of all TMS data ingestion jobs</li><li>Monitor summary statistics: Total, Processing, Completed, and Failed jobs</li><li>Filter records by File Type and Status</li><li>Review Job ID, File Type, Status, Total Records, Records Ingested, Start Time (UTC), and Processing Duration for each job</li><li>Refresh the page to display the latest ingestion status</li></ul></div><figure class="shot-wide">
+      <img loading="lazy" src="assets/aml-guide/fig-17.png" alt="Figure 8.2 — TMS Ingestion dashboard job detail" loading="lazy">
+      <figcaption>Figure 8.2 — TMS Ingestion dashboard job detail</figcaption>
+    </figure>
+    </section>
+    <section class="doc-section" id="admin">
+      <div class="sec-tag">Module 09</div>
+      <h2>Admin</h2>
+      <p class="nav-crumb"><span>Navigation</span> Homepage → Admin</p>
+      <ul class="check-list"><li>Edit profile and contact details</li><li>Manage user roles and permissions</li><li>Review and update screening weightages, severity bands, variables, and rules</li><li>Control notification and preference settings</li></ul>
+    </section>
+    <section class="doc-section" id="hierarchy-management">
+      <div class="sec-tag">Module 10</div>
+      <h2>Hierarchy Management</h2>
+      <p class="sec-intro">Defines the organizational reporting structure that AML operations run on top of — who sits above whom, and which unit or branch each user and case belongs to.</p>
+      <p class="nav-crumb"><span>Navigation</span> Homepage → Hierarchy Management</p>
+      <h3 id="s-10-1"><span class="sub-num">10.1</span>What It Manages</h3>
+      <p>Hierarchy Management is a platform-level module (sitting alongside Admin and Ontology, outside FT AML) used to model the institution's organizational structure — branches, teams, and reporting lines — and to map each user and business unit into that structure. Screening, monitoring, and case data all inherit this structure, which is what makes role-based routing and escalation possible elsewhere in the platform.</p>
+      <ul class="check-list">
+        <li>Define organizational units (e.g. branch, region, department) and the parent-child relationships between them</li>
+        <li>Assign users to a position within the hierarchy, establishing their reporting line and supervisor</li>
+        <li>Drive case and alert escalation paths — e.g. an unresolved case escalates automatically to the assignee's supervisor as defined here</li>
+        <li>Support segregation-of-duties and maker-checker controls by making reporting relationships explicit and auditable</li>
+        <li>Feed dashboard and SLA reporting that needs to be sliced by branch, team, or region</li>
+      </ul>
+      
+    </section>
+    <section class="doc-section" id="help-support">
+      <div class="sec-tag">Module 11</div>
+      <h2>Help &amp; Support</h2>
+      
+      <h3 id="s-11-1"><span class="sub-num">11.1</span>Common Issues &amp; Solutions</h3><div class="table-wrap"><table><thead><tr><th>Issue</th><th>Solution</th></tr></thead><tbody><tr><td>Login failed</td><td>Verify credentials, or use Forgot Password</td></tr><tr><td>Ingestion job stuck in Processing</td><td>Check source feed, click Refresh, escalate to IT/Platform Admin</td></tr><tr><td>Screening returns no matches</td><td>Confirm watchlist ingestion completed successfully</td></tr><tr><td>Unexpected spike in alerts</td><td>Review recent weightage or rule threshold changes</td></tr><tr><td>Rule not triggering as expected</td><td>Run a Dry Run to validate conditions against historical data</td></tr></tbody></table></div><h3 id="s-11-2"><span class="sub-num">11.2</span>Contact Support</h3><p>Tell us a little about what you're working on and the team will route you to the right person — typically within one business day.</p><ul class="check-list"><li><strong>Email</strong> — <a href="mailto:hello@fyscaltech.com">hello@fyscaltech.com</a></li><li><strong>Phone</strong> — +65 8080 5424</li><li><strong>Headquarters</strong> — Singapore · 68 Circular Road</li><li><strong>Response time</strong> — under 1 business day</li></ul><p class="thanks">Thank you for using FT AML.</p>
+    </section>
+  </main>
+</div>
+
+
+<div id="footer-root"></div>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+<div class="lightbox" id="lightbox"><span class="lightbox-close" id="lightboxClose">✕</span><img id="lightboxImg" src="" alt=""></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="ui_kits/website/fluted-glass.js?v=6"></script>
+<script type="text/babel" src="ui_kits/website/SiteIcons.jsx"></script>
+<script type="text/babel" src="ui_kits/website/Nav.jsx"></script>
+<script type="text/babel" src="BankingSections.jsx"></script>
+<script type="text/babel">
+  const goAml = () => { window.location.href = 'FT AML Solution.html'; };
+  ReactDOM.createRoot(document.getElementById('nav-root')).render(<BankingNav onCta={goAml} />);
+  ReactDOM.createRoot(document.getElementById('footer-root')).render(<BankingFooter />);
+</script>
+<script>
+(function(){
+  const sidebarEl=document.getElementById('sidebar');
+  const overlay=document.getElementById('sidebarOverlay');
+  const toggle=document.getElementById('menuToggle');
+  function openSb(){sidebarEl.classList.add('open');overlay.classList.add('show');document.body.style.overflow='hidden';}
+  function closeSb(){sidebarEl.classList.remove('open');overlay.classList.remove('show');document.body.style.overflow='';}
+  if(toggle) toggle.addEventListener('click',()=>{sidebarEl.classList.contains('open')?closeSb():openSb();});
+  if(overlay) overlay.addEventListener('click',closeSb);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSb();});
+
+  const links=document.querySelectorAll('.side-link');
+  const secs=document.querySelectorAll('.doc-section');
+  const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.remove('active'));const m=document.querySelector('.side-link[data-target="'+e.target.id+'"]');if(m)m.classList.add('active');}});},{rootMargin:'-15% 0px -75% 0px'});
+  secs.forEach(s=>io.observe(s));
+  links.forEach(l=>l.addEventListener('click',closeSb));
+
+  const bar=document.getElementById('scrollProgress');
+  function prog(){const h=document.documentElement;bar.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';}
+  document.addEventListener('scroll',prog,{passive:true});prog();
+
+  const btt=document.getElementById('backToTop');
+  document.addEventListener('scroll',()=>{window.scrollY>480?btt.classList.add('show'):btt.classList.remove('show');},{passive:true});
+  btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+  const reveal=document.querySelectorAll('.doc-section');
+  if('IntersectionObserver' in window){const rio=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in-view');rio.unobserve(e.target);}});},{threshold:.05,rootMargin:'0px 0px -40px 0px'});reveal.forEach(s=>rio.observe(s));}else{reveal.forEach(s=>s.classList.add('in-view'));}
+  window.addEventListener('load',()=>setTimeout(()=>reveal.forEach(s=>s.classList.add('in-view')),1200));
+
+  const lb=document.getElementById('lightbox'),lbi=document.getElementById('lightboxImg');
+  document.querySelectorAll('figure.shot-wide img').forEach(img=>{img.addEventListener('click',()=>{lbi.src=img.src;lbi.alt=img.alt;lb.classList.add('open');});});
+  function closeLb(){lb.classList.remove('open');lbi.src='';}
+  document.getElementById('lightboxClose').addEventListener('click',closeLb);
+  lb.addEventListener('click',e=>{if(e.target===lb)closeLb();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb();});
+
+  document.querySelectorAll('.doc-section > h2').forEach(h=>{const sec=h.closest('.doc-section');if(!sec||!sec.id)return;const a=document.createElement('span');a.className='h2-anchor';a.textContent='🔗';a.title='Copy link to this section';a.addEventListener('click',ev=>{ev.stopPropagation();navigator.clipboard.writeText(location.origin+location.pathname+'#'+sec.id).catch(()=>{});a.textContent='✓';setTimeout(()=>a.textContent='🔗',1200);});h.appendChild(a);});
+
+  const SLOP=6;
+  function atEnd(tw){return Math.ceil(tw.scrollLeft)+tw.clientWidth>=tw.scrollWidth-SLOP;}
+  function hints(){document.querySelectorAll('.table-wrap').forEach(tw=>{const sc=tw.scrollWidth>tw.clientWidth+SLOP;tw.classList.toggle('scrollable',sc);tw.classList.toggle('at-end',!sc||atEnd(tw));});}
+  document.querySelectorAll('.table-wrap').forEach(tw=>tw.addEventListener('scroll',()=>tw.classList.toggle('at-end',atEnd(tw)),{passive:true}));
+  hints();window.addEventListener('resize',hints);window.addEventListener('load',()=>setTimeout(hints,500));
+})();
+</script>
+<script src="theme-toggle.js"></script>
+</body>
+</html>

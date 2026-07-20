@@ -1,0 +1,95 @@
+/* Fyscal Website — animated fluted-glass hero styles (shared by hero.html + index.html) */
+.herob { position: relative; min-height: 760px; overflow: hidden; display: flex; flex-direction: column; background: #ffffff; isolation: isolate; }
+.hero-bg { position: absolute; inset: 0; overflow: hidden; z-index: 0; }
+.fluted-glass-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hero-scrim { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(255,255,255,.85) 0%, rgba(255,255,255,.45) 26%, rgba(255,255,255,0) 52%); }
+
+.bnav { position: relative; z-index: 2; display: flex; align-items: center; gap: 24px; max-width: 1180px; width: 100%; margin: 0 auto; padding: 26px 36px 0; }
+.bnav-pills { display: flex; gap: 4px; margin: 0 auto; padding: 5px; border-radius: 9999px; background: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.7); backdrop-filter: blur(10px); }
+.bnav-pill { font: 600 13.5px var(--font-body); color: var(--mono-600); background: transparent; border: none; padding: 8px 16px; border-radius: 9999px; cursor: pointer; transition: .15s; }
+.bnav-pill:hover { color: var(--fg); }
+.bnav-pill.on { background: #fff; color: var(--primary); box-shadow: 0 2px 8px rgba(10,16,40,.1); }
+.bnav-actions { display: flex; align-items: center; gap: 10px; }
+.bnav-icon { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 9999px; background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.7); cursor: pointer; transition: .15s; }
+.bnav-icon:hover { background: #fff; }
+.bnav-cta { font: 600 13.5px var(--font-body); color: #fff; background: var(--primary); border: none; padding: 11px 18px; cursor: pointer; transition: .15s; }
+.bnav-cta:hover { background: var(--tertiary-2); }
+
+.hero-inner { position: relative; z-index: 2; flex: 1; display: grid; grid-template-columns: 1.15fr .85fr; gap: 40px; align-items: center; max-width: 1180px; width: 100%; margin: 0 auto; padding: 40px 36px 56px; }
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--mono-700); padding: 6px 13px; border-radius: 9999px; background: rgba(255,255,255,.6); border: 1px solid rgba(255,255,255,.8); backdrop-filter: blur(8px); }
+.hero-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: #1f8a5b; box-shadow: 0 0 8px rgba(31,138,91,.7); }
+.hero-h1 { font-size: 60px; font-weight: 600; line-height: 1.04; letter-spacing: -.035em; margin: 24px 0 0; color: var(--fg); }
+.hero-h1 .grad { color: var(--primary); }
+.hero-sub { font-size: 17px; line-height: 1.6; color: var(--mono-600); margin-top: 20px; max-width: 460px; }
+.hero-ctas { display: flex; gap: 12px; margin-top: 30px; }
+.hbtn { font: 600 14.5px var(--font-body); padding: 14px 24px; cursor: pointer; transition: .15s; display: inline-flex; align-items: center; gap: 8px; border: 1.5px solid transparent; }
+.hbtn.light { background: var(--primary); color: #fff; border-color: var(--primary); }
+.hbtn.light:hover { background: var(--tertiary-2); border-color: var(--tertiary-2); }
+.hbtn.ghost { background: rgba(255,255,255,.5); color: var(--fg); border-color: rgba(10,16,40,.18); }
+.hbtn.ghost:hover { background: #fff; }
+.hero-feats { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 38px; padding-top: 26px; border-top: 1px solid rgba(10,16,40,.12); }
+.hfeat { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--mono-700); }
+
+.glass-stack { display: flex; flex-direction: column; gap: 16px; align-items: flex-end; }
+.glass-card { width: 300px; padding: 22px; -webkit-backdrop-filter: blur(16px) saturate(150%); backdrop-filter: blur(16px) saturate(150%); background: linear-gradient(150deg, rgba(255,255,255,.62), rgba(255,255,255,.36)); border: 1px solid rgba(255,255,255,.8); box-shadow: 0 24px 60px rgba(10,16,40,.18), inset 0 1px 1px rgba(255,255,255,.7); }
+.glass-card.balance { background: var(--gradient-brand); border-color: rgba(255,255,255,.25); box-shadow: 0 24px 60px rgba(20,110,245,.32), inset 0 1px 1px rgba(255,255,255,.3); }
+.gc-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,.65); }
+.gc-amount { font: 700 30px var(--font-mono); letter-spacing: -.02em; margin: 8px 0 6px; color: #fff; }
+.gc-amount span { font-size: 18px; opacity: .55; }
+.gc-row { display: flex; align-items: center; gap: 8px; }
+.gc-chip { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 9999px; }
+.gc-chip.up { background: rgba(255,255,255,.22); color: #fff; }
+.gc-sub { font-size: 11.5px; color: rgba(255,255,255,.6); }
+.gc-actions { display: flex; gap: 8px; margin-top: 18px; }
+.gc-act { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 0; font-size: 11px; font-weight: 600; color: #fff; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.22); }
+.glass-card.txn { width: 260px; }
+.gc-txn { display: flex; align-items: center; gap: 11px; }
+.gc-ico { width: 34px; height: 34px; display: grid; place-items: center; background: var(--primary-soft); border: 1px solid rgba(20,110,245,.2); flex-shrink: 0; }
+.gc-txn-body { flex: 1; }
+.gc-txn-name { font-size: 13px; font-weight: 600; color: var(--fg); }
+.gc-txn-meta { font-size: 11px; color: var(--mono-500); margin-top: 1px; }
+.gc-txn-amt { font: 700 13px var(--font-mono); color: var(--fg); }
+.gc-progress { height: 5px; background: rgba(10,16,40,.1); margin: 14px 0 8px; }
+.gc-progress span { display: block; height: 100%; background: var(--gradient-brand); }
+.gc-txn-foot { font-size: 11px; color: var(--mono-500); }
+
+@media (max-width: 940px) {
+  .bnav { padding: 20px 22px 0; }
+  .hero-inner { grid-template-columns: 1fr; gap: 28px; padding: 32px 22px 48px; }
+  .glass-stack { align-items: stretch; flex-direction: column; }
+  .glass-card, .glass-card.txn { width: 100%; max-width: 420px; }
+  .hero-h1 { font-size: 44px; }
+  .bnav-pills { display: none; }
+  .hero-scrim { background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.4) 40%, transparent 62%); }
+}
+@media (max-width: 560px) {
+  .herob { min-height: 0; }
+  .bnav-cta { display: none; }
+  .hero-h1 { font-size: 34px; }
+  .hero-sub { font-size: 15.5px; }
+  .hero-ctas { flex-direction: column; }
+  .hero-ctas .hbtn { width: 100%; }
+  .hero-feats { gap: 14px 18px; margin-top: 28px; padding-top: 22px; }
+}
+
+/* ── Dark mode: the hero stays a LIGHT section by design, so pin its foreground
+   to fixed light-theme colors (tokens would otherwise invert → white-on-white). */
+[data-theme="dark"] .herob { background: #ffffff; }
+[data-theme="dark"] .hero-scrim { background: linear-gradient(180deg, rgba(255,255,255,.85) 0%, rgba(255,255,255,.45) 26%, rgba(255,255,255,0) 52%); }
+[data-theme="dark"] .hero-h1 { color: #171717; }
+[data-theme="dark"] .hero-h1 .grad { color: #352eff; }
+[data-theme="dark"] .hero-sub { color: #555a66; }
+[data-theme="dark"] .hero-badge { color: #3a3f4c; background: rgba(255,255,255,.6); border-color: rgba(255,255,255,.8); }
+[data-theme="dark"] .hero-feats { border-top-color: rgba(10,16,40,.12); }
+[data-theme="dark"] .hfeat { color: #3a3f4c; }
+[data-theme="dark"] .bnav-pill { color: #555a66; }
+[data-theme="dark"] .bnav-pill:hover { color: #171717; }
+[data-theme="dark"] .bnav-pill.on { background: #fff; color: #352eff; }
+[data-theme="dark"] .bnav-icon { background: rgba(255,255,255,.55); border-color: rgba(255,255,255,.7); color: #171717; }
+[data-theme="dark"] .hbtn.ghost { color: #171717; border-color: rgba(10,16,40,.18); background: rgba(255,255,255,.5); }
+[data-theme="dark"] .gc-txn-name { color: #171717; }
+[data-theme="dark"] .gc-txn-meta, [data-theme="dark"] .gc-txn-foot { color: #555a66; }
+[data-theme="dark"] .gc-txn-amt { color: #171717; }
+[data-theme="dark"] .glass-card { background: linear-gradient(150deg, rgba(255,255,255,.62), rgba(255,255,255,.36)); border-color: rgba(255,255,255,.8); }
+/* the Fyscal wordmark in the hero nav: keep the dark (blue+ink) lockup on the light hero */
+[data-theme="dark"] .bnav svg path[fill="#ffffff"] { fill: #000000; }
